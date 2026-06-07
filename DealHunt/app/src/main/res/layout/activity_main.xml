@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_primary">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!-- Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingTop="52dp"
+            android:paddingBottom="16dp"
+            android:background="@color/bg_primary">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="4dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DEAL"
+                    android:fontFamily="@font/rajdhani_bold"
+                    android:textSize="28sp"
+                    android:textColor="@color/text_primary"
+                    android:letterSpacing="0.05" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="HUNT"
+                    android:fontFamily="@font/rajdhani_bold"
+                    android:textSize="28sp"
+                    android:textColor="@color/accent_green"
+                    android:letterSpacing="0.05" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="En ucuz oyunu en iyi platformda bul"
+                android:textSize="13sp"
+                android:textColor="@color/text_muted"
+                android:layout_marginBottom="20dp" />
+
+            <!-- Search bar -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/etSearch"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:hint="Oyun ara... (Cyberpunk, Elden Ring...)"
+                    android:textColorHint="@color/text_muted"
+                    android:textColor="@color/text_primary"
+                    android:textSize="14sp"
+                    android:background="@drawable/bg_search"
+                    android:paddingHorizontal="18dp"
+                    android:paddingEnd="52dp"
+                    android:inputType="text"
+                    android:imeOptions="actionSearch"
+                    android:singleLine="true" />
+
+                <ImageButton
+                    android:id="@+id/btnClear"
+                    android:layout_width="44dp"
+                    android:layout_height="44dp"
+                    android:layout_gravity="end|center_vertical"
+                    android:layout_marginEnd="4dp"
+                    android:src="@drawable/ic_close"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:tint="@color/text_muted"
+                    android:visibility="gone"
+                    android:contentDescription="Temizle" />
+            </FrameLayout>
+        </LinearLayout>
+
+        <!-- Search progress -->
+        <ProgressBar
+            android:id="@+id/progressSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="32dp"
+            android:visibility="gone" />
+
+        <!-- Search error -->
+        <TextView
+            android:id="@+id/tvSearchError"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/text_muted"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:padding="32dp"
+            android:visibility="gone" />
+
+        <!-- Search results -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvSearch"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"
+            android:clipToPadding="false"
+            android:visibility="gone" />
+
+        <!-- Featured section -->
+        <LinearLayout
+            android:id="@+id/layoutFeatured"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="EN İYİ FIRSATLAR"
+                android:textSize="11sp"
+                android:textColor="@color/text_muted"
+                android:letterSpacing="0.12"
+                android:paddingHorizontal="20dp"
+                android:paddingBottom="12dp" />
+
+            <!-- Shimmer placeholder -->
+            <FrameLayout
+                android:id="@+id/shimmerFeatured"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:visibility="visible">
+
+                <ProgressBar
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center" />
+            </FrameLayout>
+
+            <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+                android:id="@+id/swipeRefresh"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvFeatured"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingHorizontal="12dp"
+                    android:paddingBottom="16dp"
+                    android:clipToPadding="false"
+                    android:visibility="gone" />
+
+            </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

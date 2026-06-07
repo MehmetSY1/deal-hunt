@@ -35,6 +35,7 @@ jobs:
       - name: Download fonts
         run: |
           mkdir -p DealHunt/app/src/main/res/font
+          rm -f DealHunt/app/src/main/res/font/FONTS_README.txt
           curl -L "https://github.com/google/fonts/raw/refs/heads/main/ofl/rajdhani/Rajdhani-Bold.ttf" -o DealHunt/app/src/main/res/font/rajdhani_bold.ttf
           curl -L "https://github.com/google/fonts/raw/refs/heads/main/ofl/rajdhani/Rajdhani-SemiBold.ttf" -o DealHunt/app/src/main/res/font/rajdhani_semibold.ttf
           curl -L "https://github.com/google/fonts/raw/refs/heads/main/ofl/dmsans/DMSans%5Bopsz%2Cwght%5D.ttf" -o DealHunt/app/src/main/res/font/dm_sans_regular.ttf

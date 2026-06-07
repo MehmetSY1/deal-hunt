@@ -22,24 +22,46 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
+      - name: Fix project files
+        run: |
+          # Fix minSdk to 26 for adaptive icons and paintFlags
+          sed -i 's/minSdk 24/minSdk 26/' DealHunt/app/build.gradle
+
+          # Replace adaptive icons with simple PNG icons
+          for dir in DealHunt/app/src/main/res/mipmap-hdpi DealHunt/app/src/main/res/mipmap-xhdpi DealHunt/app/src/main/res/mipmap-xxhdpi DealHunt/app/src/main/res/mipmap-xxxhdpi; do
+            mkdir -p $dir
+            cat > $dir/ic_launcher.xml << 'EOF'
+          <?xml version="1.0" encoding="utf-8"?>
+          <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+              <background android:drawable="@color/bg_primary"/>
+              <foreground android:drawable="@drawable/ic_launcher_foreground"/>
+          </adaptive-icon>
+          EOF
+            cp $dir/ic_launcher.xml $dir/ic_launcher_round.xml
+          done
+
+          # Fix paintFlags in layouts (replace with decoration line)
+          find DealHunt/app/src/main/res/layout -name "*.xml" -exec sed -i 's/android:paintFlags="8"//g' {} \;
+
+          # Remove README from font dir
+          rm -f DealHunt/app/src/main/res/font/FONTS_README.txt
+          rm -f "DealHunt/app/src/main/res/{layout,drawable,values,font,menu,mipmap-hdpi,mipmap-xhdpi,mipmap-xxhdpi}/"
+
+      - name: Download fonts
+        run: |
+          mkdir -p DealHunt/app/src/main/res/font
+          curl -L "https://github.com/google/fonts/raw/refs/heads/main/ofl/rajdhani/Rajdhani-Bold.ttf" -o DealHunt/app/src/main/res/font/rajdhani_bold.ttf
+          curl -L "https://github.com/google/fonts/raw/refs/heads/main/ofl/rajdhani/Rajdhani-SemiBold.ttf" -o DealHunt/app/src/main/res/font/rajdhani_semibold.ttf
+          curl -L "https://github.com/google/fonts/raw/refs/heads/main/ofl/dmsans/DMSans%5Bopsz%2Cwght%5D.ttf" -o DealHunt/app/src/main/res/font/dm_sans_regular.ttf
+
       - name: Fix Gradle wrapper
         run: |
           cd DealHunt
           wget -q "https://services.gradle.org/distributions/gradle-8.4-bin.zip" -O /tmp/gradle.zip
           unzip -q /tmp/gradle.zip -d /tmp/gradle-dist
-          export GRADLE_HOME=/tmp/gradle-dist/gradle-8.4
-          export PATH=$GRADLE_HOME/bin:$PATH
+          export PATH=/tmp/gradle-dist/gradle-8.4/bin:$PATH
           gradle wrapper --gradle-version 8.4
           chmod +x gradlew
-
-      - name: Download fonts
-        run: |
-          mkdir -p DealHunt/app/src/main/res/font
-          rm -f DealHunt/app/src/main/res/font/FONTS_README.txt
-          curl -L "https://github.com/google/fonts/raw/refs/heads/main/ofl/rajdhani/Rajdhani-Bold.ttf" -o DealHunt/app/src/main/res/font/rajdhani_bold.ttf
-          curl -L "https://github.com/google/fonts/raw/refs/heads/main/ofl/rajdhani/Rajdhani-SemiBold.ttf" -o DealHunt/app/src/main/res/font/rajdhani_semibold.ttf
-          curl -L "https://github.com/google/fonts/raw/refs/heads/main/ofl/dmsans/DMSans%5Bopsz%2Cwght%5D.ttf" -o DealHunt/app/src/main/res/font/dm_sans_regular.ttf
-          ls -la DealHunt/app/src/main/res/font/
 
       - name: Build Debug APK
         working-directory: DealHunt

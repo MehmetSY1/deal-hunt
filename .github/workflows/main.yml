@@ -24,28 +24,16 @@ jobs:
 
       - name: Fix project files
         run: |
-          # Fix minSdk to 26 for adaptive icons and paintFlags
           sed -i 's/minSdk 24/minSdk 26/' DealHunt/app/build.gradle
-
-          # Replace adaptive icons with simple PNG icons
-          for dir in DealHunt/app/src/main/res/mipmap-hdpi DealHunt/app/src/main/res/mipmap-xhdpi DealHunt/app/src/main/res/mipmap-xxhdpi DealHunt/app/src/main/res/mipmap-xxxhdpi; do
-            mkdir -p $dir
-            cat > $dir/ic_launcher.xml << 'EOF'
-          <?xml version="1.0" encoding="utf-8"?>
-          <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-              <background android:drawable="@color/bg_primary"/>
-              <foreground android:drawable="@drawable/ic_launcher_foreground"/>
-          </adaptive-icon>
-          EOF
-            cp $dir/ic_launcher.xml $dir/ic_launcher_round.xml
-          done
-
-          # Fix paintFlags in layouts (replace with decoration line)
           find DealHunt/app/src/main/res/layout -name "*.xml" -exec sed -i 's/android:paintFlags="8"//g' {} \;
-
-          # Remove README from font dir
           rm -f DealHunt/app/src/main/res/font/FONTS_README.txt
           rm -f "DealHunt/app/src/main/res/{layout,drawable,values,font,menu,mipmap-hdpi,mipmap-xhdpi,mipmap-xxhdpi}/"
+
+          # Fix: GameSearchResult uses 'thumbnail' not 'thumb'
+          sed -i 's/deal\.thumb/deal.thumbnail/g' DealHunt/app/src/main/java/com/dealhunt/app/ui/FeaturedDealAdapter.kt
+          sed -i 's/game\.thumbnail/game.thumbnail/g' DealHunt/app/src/main/java/com/dealhunt/app/ui/MainActivity.kt
+          # Fix MainActivity openGameDetail call - uses deal.thumb
+          sed -i 's/deal\.thumb/deal.thumbnail/g' DealHunt/app/src/main/java/com/dealhunt/app/ui/MainActivity.kt
 
       - name: Download fonts
         run: |

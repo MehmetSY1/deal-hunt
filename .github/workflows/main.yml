@@ -22,20 +22,23 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
 
+      - name: Fix Gradle wrapper
+        run: |
+          cd DealHunt
+          wget -q "https://services.gradle.org/distributions/gradle-8.4-bin.zip" -O /tmp/gradle.zip
+          unzip -q /tmp/gradle.zip -d /tmp/gradle-dist
+          export GRADLE_HOME=/tmp/gradle-dist/gradle-8.4
+          export PATH=$GRADLE_HOME/bin:$PATH
+          gradle wrapper --gradle-version 8.4
+          chmod +x gradlew
+
       - name: Download fonts
         run: |
           mkdir -p DealHunt/app/src/main/res/font
-          curl -L "https://fonts.gstatic.com/s/rajdhani/v10/LDI2apCSOBg7S-QT7pasEfOO.woff2" -o /tmp/raj.woff2 || true
-          wget --tries=3 -q "https://github.com/google/fonts/raw/refs/heads/main/ofl/rajdhani/Rajdhani-Bold.ttf" -O DealHunt/app/src/main/res/font/rajdhani_bold.ttf || \
           curl -L "https://github.com/google/fonts/raw/refs/heads/main/ofl/rajdhani/Rajdhani-Bold.ttf" -o DealHunt/app/src/main/res/font/rajdhani_bold.ttf
-          wget --tries=3 -q "https://github.com/google/fonts/raw/refs/heads/main/ofl/rajdhani/Rajdhani-SemiBold.ttf" -O DealHunt/app/src/main/res/font/rajdhani_semibold.ttf || \
           curl -L "https://github.com/google/fonts/raw/refs/heads/main/ofl/rajdhani/Rajdhani-SemiBold.ttf" -o DealHunt/app/src/main/res/font/rajdhani_semibold.ttf
-          wget --tries=3 -q "https://github.com/google/fonts/raw/refs/heads/main/ofl/dmsans/DMSans%5Bopsz%2Cwght%5D.ttf" -O DealHunt/app/src/main/res/font/dm_sans_regular.ttf || \
           curl -L "https://github.com/google/fonts/raw/refs/heads/main/ofl/dmsans/DMSans%5Bopsz%2Cwght%5D.ttf" -o DealHunt/app/src/main/res/font/dm_sans_regular.ttf
           ls -la DealHunt/app/src/main/res/font/
-
-      - name: Grant execute permission for gradlew
-        run: chmod +x DealHunt/gradlew
 
       - name: Build Debug APK
         working-directory: DealHunt
